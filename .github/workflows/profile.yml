@@ -1,0 +1,26 @@
+name: Profile README checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate profile README
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          readme = Path('README.md').read_text(encoding='utf-8')
+          if not readme.strip():
+              raise SystemExit('README.md must not be empty')
+          print('README.md is non-empty and valid UTF-8')
+          PY
